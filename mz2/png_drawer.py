@@ -1,3 +1,4 @@
+import os
 
 CELL_WIDTH = 30
 CELL_HEIGHT = 20
@@ -58,4 +59,6 @@ class PngDrawer(object):
                              width=self.border_thickness)
 
         del pen
+        if not os.path.exists(os.path.dirname(self.file_path)):
+            os.makedirs(os.path.dirname(self.file_path))
         im.save(self.file_path, "PNG")

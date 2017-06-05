@@ -1,11 +1,5 @@
-import grid
-import btree
-import sidewinder
-import random_walk
-import random_adjacent
-import backtrack
-import gui_runner
-import png_drawer
+from mz2 import grid, btree, sidewinder, random_walk, random_adjacent, backtrack, gui_runner, png_drawer
+
 import time
 import argparse
 
