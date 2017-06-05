@@ -42,7 +42,15 @@ def silent_runner(last_print = False):
 def write_file(path, grid):
     png_drawer.PngDrawer(path, grid).draw();
 
-
+def draw_longest_path(grid, silent=True):
+    dst = distances.Distances(grid[(0, 0)])
+    dst.compute_all()
+    source, _ = dst.max()
+    dst = distances.Distances(source)
+    dst.compute_all()
+    dst.mark_on_path(dst.max()[0])
+    if not silent:
+        print grid
 
 def main(args):
     g = grid.Grid(args.width, args.height);
@@ -66,14 +74,7 @@ def main(args):
         kwargs['delay'] = args.speed
     runner(command)(g, **kwargs)
     if args.mark_path:
-        dst = distances.Distances(g[(0, 0)])
-        dst.compute_all()
-        source, _ = dst.max()
-        dst = distances.Distances(source)
-        dst.compute_all()
-        dst.mark_on_path(dst.max()[0])
-        if not args.gui:
-            print g
+        draw_longest_path(grid, silent=(not args.gui))
     if args.dest:
         write_file(args.dest, g)
 
@@ -94,6 +95,7 @@ def run_main():
     parser.add_argument('--width', default=20, type=int)
     parser.add_argument('--height', default=15, type=int)
     parser.add_argument('--mark-path', dest='mark_path', action='store_true')
+    parser.add_argument('--center-flood', dest="center_flood", action='store_true')
 
     args = parser.parse_args()
     main(args)
