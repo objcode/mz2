@@ -72,7 +72,8 @@ def main(args):
         dst = distances.Distances(source)
         dst.compute_all()
         dst.mark_on_path(dst.max()[0])
-        print g
+        if not args.gui:
+            print g
     if args.dest:
         write_file(args.dest, g)
 

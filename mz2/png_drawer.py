@@ -12,13 +12,15 @@ class PngDrawer(object):
                  cell_height=CELL_HEIGHT,
                  border_thickness=BORDER_THICKNESS,
                  edge_padding=EDGE_PADDING,
-                 color="#aa5000"):
+                 color="#aa5000",
+                 path="#3350aa"):
       self.file_path = file_path
       self.grid = grid
       self.cell_dim = (cell_width, cell_height)
       self.border_thickness = border_thickness
       self.edge_padding = edge_padding
       self.color = color
+      self.path_color = path
 
 
     def im_size(self):
@@ -57,6 +59,30 @@ class PngDrawer(object):
                               (left + self.cell_dim[0], btop)],
                              fill=self.color,
                              width=self.border_thickness)
+
+                for path in cell.path_neighbors():
+                    center = (left + self.cell_dim[0] / 2, top + self.cell_dim[1] / 2)
+
+                    if path == cell.top:
+                        pen.line([center,
+                                  (center[0], center[1] - self.cell_dim[1])],
+                                 fill=self.path_color,
+                                 width=self.border_thickness)
+                    elif path == cell.bottom:
+                        pen.line([center,
+                                  (center[0], center[1] + self.cell_dim[1])],
+                                 fill=self.path_color,
+                                 width=self.border_thickness)
+                    elif path == cell.right:
+                        pen.line([center,
+                                  (center[0] + self.cell_dim[0], center[1])],
+                                 fill=self.path_color,
+                                 width=self.border_thickness)
+                    elif path == cell.left:
+                        pen.line([center,
+                                  (center[0] - self.cell_dim[0], center[1])],
+                                 fill=self.path_color,
+                                 width=self.border_thickness)
 
         del pen
         if not os.path.exists(os.path.dirname(self.file_path)):
