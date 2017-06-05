@@ -1,4 +1,4 @@
-from mz2 import grid, btree, sidewinder, random_walk, random_adjacent, backtrack, gui_runner, png_drawer
+from mz2 import grid, btree, sidewinder, random_walk, random_adjacent, backtrack, gui_runner, png_drawer, distances
 
 import time
 import argparse
@@ -65,6 +65,14 @@ def main(args):
     if args.speed:
         kwargs['delay'] = args.speed
     runner(command)(g, **kwargs)
+    if args.mark_path:
+        dst = distances.Distances(g[(0, 0)])
+        dst.compute_all()
+        source, _ = dst.max()
+        dst = distances.Distances(source)
+        dst.compute_all()
+        dst.mark_on_path(dst.max()[0])
+        print g
     if args.dest:
         write_file(args.dest, g)
 
@@ -84,6 +92,7 @@ def run_main():
     parser.add_argument('-g', '--gui', action='store_true')
     parser.add_argument('--width', default=20, type=int)
     parser.add_argument('--height', default=15, type=int)
+    parser.add_argument('--mark-path', dest='mark_path', action='store_true')
 
     args = parser.parse_args()
     main(args)

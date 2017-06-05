@@ -8,7 +8,6 @@ class Node(object):
 
     hi = None
     on_path = False
-    value = 0
 
     def __init__(self, row, col):
         self.row = row
@@ -18,23 +17,11 @@ class Node(object):
     def mark_on_path(self):
         self.on_path = True
 
-    def set_value(self, value):
-        self.value = value
-
     def path_neighbors(self):
         if not self.on_path:
             return []
 
         return [a for a in self.links if a.on_path]
-
-    def cheaper_neighbors(self):
-        return [a for a in self.links if a.value < self.value]
-
-    def cheapest_neighbor(self):
-        neighbors = self.cheaper_neighbors()
-        if not neighbors:
-            return None
-        return min(neighbors)
 
     def adjacent(self):
         return [n for n in [self.left, self.right, self.top, self.bottom] if n]
@@ -91,6 +78,7 @@ class Node(object):
             extra_row = "=="
 
         me = " " if self.links else "?"
+        me = "*" if self.on_path else me
 
         last_char = ""
         if not self.right:
