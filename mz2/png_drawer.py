@@ -33,6 +33,9 @@ class PngDrawer(object):
         im = Image.new("RGB", self.im_size(), "white")
         pen = ImageDraw.Draw(im)
 
+        distances = self.grid.distances
+        _, max_distance = distances.max()
+
         for y, row, in enumerate(self.grid.iterrows()):
             for x, cell in enumerate(row):
                 left = (self.edge_padding / 2) + self.cell_dim[0] * x
@@ -59,6 +62,17 @@ class PngDrawer(object):
                               (left + self.cell_dim[0], btop)],
                              fill=self.color,
                              width=self.border_thickness)
+
+                if distances and max_distance:
+                    current = distances[cell]
+                    if current is None:
+                        fill = (0x33, 0x33, 0x33)
+                    else:
+                        pct = .3 * current / max_distance
+                        fill = (int(0xEE * pct), 0x11, int(0x100 * pct))
+                    points = [(left, top),
+                              (left + self.cell_dim[0], top + self.cell_dim[1])]
+                    pen.rectangle(points, fill = fill)
 
                 for path in cell.path_neighbors():
                     center = (left + self.cell_dim[0] / 2, top + self.cell_dim[1] / 2)

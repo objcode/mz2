@@ -52,10 +52,16 @@ def draw_longest_path(grid, silent=True):
     if not silent:
         print grid
 
+def flood_center(grid):
+    center = grid[(grid.width / 2, grid.height / 2)]
+    dst = distances.Distances(center)
+    dst.compute_all()
+    grid.distances = dst
+
 def main(args):
     g = grid.Grid(args.width, args.height);
     if args.quick:
-        runner = silent_runner(not args.gui)
+        runner = silent_runner(not args.gui and not args.dest)
     elif args.gui:
         runner = gui_runner.GuiRunner
     else:
@@ -74,7 +80,9 @@ def main(args):
         kwargs['delay'] = args.speed
     runner(command)(g, **kwargs)
     if args.mark_path:
-        draw_longest_path(grid, silent=(not args.gui))
+        draw_longest_path(g, silent=(args.gui or args.dest))
+    if args.center_flood:
+        flood_center(g)
     if args.dest:
         write_file(args.dest, g)
 
