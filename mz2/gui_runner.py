@@ -7,6 +7,7 @@ class GuiRunner(object):
         self.fn = fn
         self.draw_path = draw_path
         self.flood_center = flood_center
+        self.last_drawn = None
 
     def __call__(self, grid, **kwargs):
         self.grid = grid
@@ -18,10 +19,14 @@ class GuiRunner(object):
         for trial in gen:
             self.draw(trial, cursor=trial)
             self.flush()
+            time.sleep(0.2)
         self.draw_grid()
         self.tk.mainloop()
 
-    def draw(self, cell, cursor=None, recurse=True):
+    def draw(self, cell, cursor=None, refresh_last=True):
+        if refresh_last and self.last_drawn:
+            self.draw(self.last_drawn, cursor=cursor, refresh_last=False)
+        self.last_drawn = cell
         cell_width = int(1.0 * (self.width - 6) / self.grid.width)
         cell_height = int(1.0 * (self.height - 6) / self.grid.height)
         top = 3 + cell.row * cell_height
@@ -52,9 +57,6 @@ class GuiRunner(object):
             color = "white"
         self.canvas.create_line(left + cell_width, top, left + cell_width, top + cell_height, fill=color)
 
-        if recurse:
-            for neighbor in cell.adjacent():
-                self.draw(neighbor, recurse=False)
 
     def flush(self):
         self.tk.update_idletasks()
