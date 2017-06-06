@@ -18,6 +18,12 @@ class Grid(object):
         self.link_cells()
         self.distances = None
 
+    def reset(self):
+        self.grid = make_grid(self.width, self.height)
+        self.link_cells()
+        self.distances = None
+
+
     def link_cells(self):
         for ridx, row in enumerate(self.grid):
             for cidx, col in enumerate(row):
