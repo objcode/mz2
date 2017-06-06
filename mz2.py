@@ -1,4 +1,4 @@
-from mz2 import grid, btree, sidewinder, random_walk, random_adjacent, backtrack, gui_runner, png_drawer, distances, wilson
+from mz2 import grid, btree, sidewinder, random_walk, random_adjacent, backtrack, gui_runner, png_drawer, distances, wilson, hunt_and_kill
 
 import time
 import argparse
@@ -74,6 +74,7 @@ def main(args):
         'random_adjacent': random_adjacent.make,
         'backtrack': backtrack.make,
         'wilson': wilson.make,
+        'hunt_and_kill': hunt_and_kill.make,
     }
     command = commands.get(args.generator)
     kwargs = {}
@@ -86,15 +87,17 @@ def main(args):
         flood_center(g)
     if args.dest:
         write_file(args.dest, g)
+    if args.stats:
+        print "Deadends: %s" % (len(list(g.deadends())))
 
 def run_main():
     parser = argparse.ArgumentParser(description='Generate Mazes.')
     parser.add_argument('generator', nargs='?',
-                        choices=['wilson', 'btree', 'sidewinder', 'random_walk', 'random_adjacent', 'backtrack'],
+                        choices=['wilson', 'btree', 'sidewinder', 'random_walk', 'random_adjacent', 'backtrack', 'hunt_and_kill'],
                         default='backtrack')
     parser.add_argument('-d', '--dest',
                         help='Specify a destination to write maze images to.')
-    parser.add_argument('-x', '--stats',
+    parser.add_argument('-x', '--stats', action='store_true',
                         help='Print stats after running the maze generator.')
     parser.add_argument('-s', '--speed', default='1', type=int,
                         help='Specify the speed of animation. Skip -S steps per frame.')

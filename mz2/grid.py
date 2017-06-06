@@ -44,6 +44,11 @@ class Grid(object):
             for cell in row:
                 yield cell
 
+    def deadends(self):
+        for cell in self.iteritems():
+            if cell.is_deadend():
+                yield node
+
     def debug_print(self):
         print "debug_print"
         print '\n'.join([', '.join([str(cell) for cell in row]) for row in self.grid])

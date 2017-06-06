@@ -23,6 +23,12 @@ class Node(object):
 
         return [a for a in self.links if a.on_path]
 
+    def is_deadend(self):
+        return len(self.links) == 1
+
+    def is_unconnected(self):
+        return not self.links
+
     def adjacent(self):
         return [n for n in [self.left, self.right, self.top, self.bottom] if n]
 
