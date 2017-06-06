@@ -1,4 +1,4 @@
-from mz2 import grid, btree, sidewinder, random_walk, random_adjacent, backtrack, gui_runner, png_drawer, distances, wilson, hunt_and_kill
+from mz2 import grid, btree, sidewinder, random_walk, random_adjacent, backtrack, gui_runner, png_drawer, distances, wilson, hunt_and_kill, growing_tree
 
 import time
 import argparse
@@ -58,6 +58,16 @@ def flood_center(grid):
     dst.compute_all()
     grid.distances = dst
 
+def gen_growing_tree(args):
+    options = {
+        'random': growing_tree.RANDOM,
+        'first': growing_tree.FIRST,
+        'last': growing_tree.LAST,
+    }
+
+    selector = options.get(args.growing_selector, growing_tree.RANDOM)
+    return growing_tree.gen(selector)
+
 def main(args):
     g = grid.Grid(args.width, args.height);
     if args.quick:
@@ -75,6 +85,7 @@ def main(args):
         'backtrack': backtrack.make,
         'wilson': wilson.make,
         'hunt_and_kill': hunt_and_kill.make,
+        'growing_tree': gen_growing_tree(args)
     }
     command = commands.get(args.generator)
     kwargs = {}
@@ -93,7 +104,7 @@ def main(args):
 def run_main():
     parser = argparse.ArgumentParser(description='Generate Mazes.')
     parser.add_argument('generator', nargs='?',
-                        choices=['wilson', 'btree', 'sidewinder', 'random_walk', 'random_adjacent', 'backtrack', 'hunt_and_kill'],
+                        choices=['wilson', 'btree', 'sidewinder', 'random_walk', 'random_adjacent', 'backtrack', 'hunt_and_kill', 'growing_tree'],
                         default='backtrack')
     parser.add_argument('-d', '--dest',
                         help='Specify a destination to write maze images to.')
@@ -108,6 +119,10 @@ def run_main():
     parser.add_argument('--height', default=15, type=int)
     parser.add_argument('--mark-path', dest='mark_path', action='store_true')
     parser.add_argument('--center-flood', dest="center_flood", action='store_true')
+    parser.add_argument('--growing-selector', nargs='?',
+                        dest='growing_selector',
+                        default='random',
+                        choices=['random', 'first', 'last'])
 
     args = parser.parse_args()
     main(args)

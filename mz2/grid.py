@@ -1,4 +1,5 @@
 import node
+import random
 
 def make_grid(width, height):
     retval = []
@@ -48,6 +49,9 @@ class Grid(object):
         for cell in self.iteritems():
             if cell.is_deadend():
                 yield node
+
+    def random_node(self):
+        return self[(random.randint(0, self.height - 1), random.randint(0, self.width -1))]
 
     def debug_print(self):
         print "debug_print"
