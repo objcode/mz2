@@ -15,6 +15,7 @@ class Grid(object):
         self.width = width
         self.height = height
         self.link_cells()
+        self.distances = None
 
     def link_cells(self):
         for ridx, row in enumerate(self.grid):

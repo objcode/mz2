@@ -1,4 +1,4 @@
-from mz2 import grid, btree, sidewinder, random_walk, random_adjacent, backtrack, gui_runner, png_drawer, distances
+from mz2 import grid, btree, sidewinder, random_walk, random_adjacent, backtrack, gui_runner, png_drawer, distances, wilson
 
 import time
 import argparse
@@ -53,7 +53,7 @@ def draw_longest_path(grid, silent=True):
         print grid
 
 def flood_center(grid):
-    center = grid[(grid.width / 2, grid.height / 2)]
+    center = grid[(grid.height / 2, grid.width / 2)]
     dst = distances.Distances(center)
     dst.compute_all()
     grid.distances = dst
@@ -72,7 +72,8 @@ def main(args):
         'sidewinder': sidewinder.make,
         'random_walk': random_walk.make,
         'random_adjacent': random_adjacent.make,
-        'backtrack': backtrack.make
+        'backtrack': backtrack.make,
+        'wilson': wilson.make,
     }
     command = commands.get(args.generator)
     kwargs = {}
@@ -89,7 +90,7 @@ def main(args):
 def run_main():
     parser = argparse.ArgumentParser(description='Generate Mazes.')
     parser.add_argument('generator', nargs='?',
-                        choices=['btree', 'sidewinder', 'random_walk', 'random_adjacent', 'backtrack'],
+                        choices=['wilson', 'btree', 'sidewinder', 'random_walk', 'random_adjacent', 'backtrack'],
                         default='backtrack')
     parser.add_argument('-d', '--dest',
                         help='Specify a destination to write maze images to.')
