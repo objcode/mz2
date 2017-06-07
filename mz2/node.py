@@ -9,13 +9,18 @@ class Node(object):
     hi = None
     on_path = False
 
-    def __init__(self, row, col):
+    def __init__(self, row, col, cb):
         self.row = row
         self.col = col
         self.links = []
+        self.callback = cb
 
-    def mark_on_path(self):
-        self.on_path = True
+    def mark_on_path(self, on_path=True):
+        changed = on_path != self.on_path
+        self.on_path = on_path
+        if changed and self.callback:
+            # don't spam this one every time it gets touched
+            self.callback(self, None)
 
     def path_neighbors(self):
         if not self.on_path:
@@ -42,6 +47,8 @@ class Node(object):
         self.links.append(other)
         if bidi:
             other.links.append(self)
+        if self.callback:
+            self.callback(self, other)
 
     def is_linked(self, other):
         return other is not None and other in self.links

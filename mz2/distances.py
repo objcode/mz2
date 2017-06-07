@@ -11,8 +11,11 @@ class Distances(object):
     def __setitem__(self, cell, distance):
         self.store[cell] = distance
 
+    def __contains__(self, cell):
+        return cell in self.store
+
     def cells(self):
-        return self.store.keys()
+        return self.store.iterkeys()
 
     def max(self):
         cur, highest = self.root, 0
@@ -21,14 +24,16 @@ class Distances(object):
                 cur, highest = cell, distance
         return cur, highest
 
-    def mark_on_path(self, destination):
+    def get_path(self, destination):
+        path = []
         while destination:
-            destination.mark_on_path()
+            path.append(destination)
             newdest = None
             for cell in destination.links:
                 if self.store[cell] < self.store[destination]:
                     newdest = cell
             destination = newdest
+        return path
 
     def compute_all(self):
         frontier = [self.root]

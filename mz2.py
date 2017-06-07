@@ -1,4 +1,4 @@
-from mz2 import grid, btree, sidewinder, random_walk, random_adjacent, backtrack, gui_runner, png_drawer, distances, wilson, hunt_and_kill, growing_tree
+from mz2 import grid, btree, sidewinder, random_walk, random_adjacent, backtrack, gui_runner, png_drawer, wilson, hunt_and_kill, growing_tree, distances
 
 import time
 import argparse
@@ -43,20 +43,9 @@ def write_file(path, grid):
     png_drawer.PngDrawer(path, grid).draw();
 
 def draw_longest_path(grid, silent=True):
-    dst = distances.Distances(grid[(0, 0)])
-    dst.compute_all()
-    source, _ = dst.max()
-    dst = distances.Distances(source)
-    dst.compute_all()
-    dst.mark_on_path(dst.max()[0])
+    grid.draw_longest_path()
     if not silent:
         print grid
-
-def flood_center(grid):
-    center = grid[(grid.height / 2, grid.width / 2)]
-    dst = distances.Distances(center)
-    dst.compute_all()
-    grid.distances = dst
 
 def gen_growing_tree(args):
     options = {
@@ -73,7 +62,7 @@ def main(args):
     if args.quick:
         runner = silent_runner(not args.gui and not args.dest)
     elif args.gui:
-        runner = gui_runner.GuiRunner
+        runner = gui_runner.GuiRunner(delay=args.wait, skulls=args.skulls, mark_path=args.mark_path, center_flood=args.center_flood)
     else:
         runner = print_runner
 
@@ -95,7 +84,7 @@ def main(args):
     if args.mark_path:
         draw_longest_path(g, silent=(args.gui or args.dest))
     if args.center_flood:
-        flood_center(g)
+        g.flood_center()
     if args.dest:
         write_file(args.dest, g)
     if args.stats:
@@ -123,6 +112,8 @@ def run_main():
                         dest='growing_selector',
                         default='random',
                         choices=['random', 'first', 'last'])
+    parser.add_argument('-w', '--gui-wait', dest='wait', default=0, type=int)
+    parser.add_argument('--draw-skulls', help='draw sculls at deadends', action="store_true", dest="skulls")
 
     args = parser.parse_args()
     main(args)
