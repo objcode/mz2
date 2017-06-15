@@ -1,0 +1,53 @@
+python mz2.py  --width 50 --height 20 --gui --center-flood --mark-path btree
+
+* Discuss basic structure of grid
+* What is a maze?
+* Node class
+* Runs are very easy up and to the right
+
+python mz2.py  --width 50 --height 20 --gui --center-flood --mark-path sidewinder
+
+* Obvious optimization of btree
+* Runs are easy bottom-> top
+* Example of using extra data to pick a better link
+
+python mz2.py  --width 50 --height 20 --gui --center-flood --mark-path random_walk
+
+* What is bias
+* runtime?
+
+python mz2.py  --width 50 --height 20 --gui --center-flood --mark-path hunt_and_kill
+
+* Bias
+* Dead ends?
+
+python mz2.py  --width 50 --height 20 --gui --center-flood --mark-path random_adjacent
+
+* Obvious optimization
+* Nice "Texture"
+* My personal favorite mazes are this texture
+
+python mz2.py  --width 50 --height 20 --gui --center-flood --mark-path backtrack
+
+* Stack to walk back in history
+* Coolest one to watch
+* Makes "hard" mazes with long runs
+
+python mz2.py  --width 50 --height 20 --gui --center-flood --mark-path growing_tree
+
+* "general" maze algorithm
+* Way to select next node determines texture
+* Random selection leads to smooth texture - no bias to "eat" paths
+
+ python mz2.py  --width 50 --height 20 --gui --center-flood --mark-path growing_tree --growing-selector=first
+
+ * What if we choose first element?
+ * Leads to very interesting "gross" patterns with a bias for linear runs
+ * But easy mazes.
+
+ python mz2.py  --width 50 --height 20 --gui --center-flood --mark-path growing_tree --growing-selector=last
+
+ * What if we choose last element?
+ * This is just backtrack
+
+ * Mixing selector on growing_tree allows us to intentionally bias
