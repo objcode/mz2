@@ -15,13 +15,16 @@ def make(grid, delay=1):
             count += 1
             if count % delay == 0:
                 yield trial
+            # look for a previously unvisited neighbor and link to it (walk)
             unlinked = [i for i in trial.unlinked() if i.is_unconnected()]
             if unlinked:
                 choice = random.choice(list(unlinked))
                 choice.link(trial)
                 unlinked.remove(choice)
             else:
+                # no neighbors, this path is dead
                 choice = None
+            #update state for next run
             adjacent.update(unlinked)
             if trial in adjacent:
                 adjacent.remove(trial)
