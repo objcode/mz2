@@ -33,6 +33,7 @@ class GuiRunner(object):
             gen = fn(grid, **kwargs)
             grid.callback = self.onlink
             self.make_window()
+            self.set_title(fn)
             self.draw_grid()
             self.flush()
             for trial in gen:
@@ -191,3 +192,13 @@ class GuiRunner(object):
         self.height = 800 if ratio < 1 else 800 / ratio
         self.canvas = Canvas(master=self.tk, width=self.width, height=self.height)
         self.canvas.pack()
+
+    def set_title(self, fn):
+        args = []
+        args.append("height: %s, width: %s" % (self.grid.height, self.grid.width))
+        args.append("wait: %s " % (self.delay,) if self.delay else None)
+        args.append("flood_center" if self.flood_center else None)
+        args.append("draw_path" if self.draw_path else None)
+        args = [a for a in args if a]
+        dword = "(%s)" % (", ".join(args)) if args else ""
+        self.tk.title("%s => %s %s" % (fn.__module__.split('.')[-1], fn.__name__, dword))
