@@ -6,7 +6,9 @@ class Node(object):
 
     links = None
 
+    # for highlighting
     hi = None
+    # is this on a path?
     on_path = False
 
     def __init__(self, row, col, cb):

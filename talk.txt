@@ -21,6 +21,9 @@ python mz2.py  --width 50 --height 20 --gui --center-flood --mark-path hunt_and_
 * Bias
 * Dead ends?
 
+[Possible side]
+ * Dijkstra's
+
 python mz2.py  --width 50 --height 20 --gui --center-flood --mark-path random_adjacent
 
 * Obvious optimization
@@ -51,3 +54,7 @@ python mz2.py  --width 50 --height 20 --gui --center-flood --mark-path growing_t
  * This is just backtrack
 
  * Mixing selector on growing_tree allows us to intentionally bias
+
+python mz2.py  --width 50 --height 20 --gui --center-flood --mark-path wilson
+
+ * A fun randomized algorithm (extra time)
